@@ -1,0 +1,13 @@
+---
+- name: "Playbook SNMP automation"
+  hosts: "{{ env | default('dev') }}" # noqa: syntax-check
+  connection: local
+  vars_files:
+    - "../vaults/{{ env }}.yml"
+  tasks:
+
+    - name: ":::: NXOS tasks ::::"
+      include_role:
+        name: snmp
+      vars:
+        var1: 1

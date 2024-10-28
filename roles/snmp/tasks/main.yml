@@ -1,0 +1,46 @@
+---
+# tasks file for snmp
+
+#- name: ":::: Determine device type ::::"
+#  cisco.nxos.nxos_config:
+#    lines: hostname {{ inventory_hostname }}
+#    save_when: device_type
+
+- name: ":::: SNMP role ::::"
+  set_fact:
+    snmp_role: role
+
+- name: ":::: Determine device type ::::"
+  set_fact:
+    snmp_device_role: role
+
+- name: ":::: NXOS tasks ::::"
+  include_tasks:
+    file: nxos_tasks.yaml
+
+- name: ":::: Filter data comparison ::::"
+  set_fact:
+    snmp_device_role: role
+  
+#- name: ":::: Set facts ::::"
+#  set_fact:
+#    cisco.nxos.nxos_facts: 
+#      - gather_network_resources: snmp_servers
+
+- name: ":::: NXOS filter data for comparison ::::"
+  include_tasks:
+    file: nxos_filter_comparison.yaml
+
+- name: ":::: ACL Validations ::::"
+  include_tasks:
+    file: acl_validations.yaml
+
+- name: ":::: NXOS filter data for comparison ::::"
+  include_tasks:
+    file: nxos_filter_comparison.yaml
+
+- name: ":::: NXOS send notification ::::"
+  include_tasks:
+    file: nxos_filter_comparison.yaml
+
+

@@ -1,0 +1,16 @@
+---
+# tasks file for common set value list
+
+# Setting host facts using complex arguments
+- name: ":::: Add values to report list ::::"
+  set_fact:
+     one_fact: report_list
+     other_fact: "{{ nxos_register }}"
+     another_fact: "{{ some_registered_var.results | map(attribute='ansible_facts.some_fact') | list }}"
+
+- name: ":::: Add values to report list ::::"
+  set_fact:
+    one_fact: yes
+    other_fact: yes
+
+    

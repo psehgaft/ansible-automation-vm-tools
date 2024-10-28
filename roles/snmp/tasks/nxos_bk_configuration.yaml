@@ -1,0 +1,12 @@
+- name: ":::: Create backup directory (if not exists) ::::"
+  ansible.builtin.file:
+    path: "{{ backup_folder }}"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+
+- name: ":::: Save the backup to a local file ::::"
+  ansible.builtin.copy:
+    content: "{{ nxos_backup.stdout[0] }}"
+    dest: "{{ backup_folder }}/nxos_backup_{{ inventory_hostname }}_{{ timestamp }}.txt"
+  delegate_to: localhost

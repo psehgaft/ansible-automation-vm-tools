@@ -1,0 +1,9 @@
+---
+# name: ":::: Diff the running-config against a provided config ::::"
+#  cisco.nxos.nxos_config:
+#    diff_against: intended
+#    intended_config: "{{ lookup('file', 'master.cfg') }}"
+
+- name: ":::: NXOS file comparaison ::::"
+  set_fact:
+    comparison: true

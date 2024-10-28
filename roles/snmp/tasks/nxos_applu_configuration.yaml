@@ -1,0 +1,7 @@
+- name: ":::: Apply new configuration to NX-OS device ::::"
+  nxos_config:
+    lines:
+      - interface Ethernet1/1
+      - description Configured by Ansible
+      - no shutdown
+    save_when: modified

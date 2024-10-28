@@ -1,0 +1,24 @@
+---
+snmp-server-user: "{{ item.snmpv3_user }}" 
+vdc-operator:
+auth: "{{ item.snmpv3_auth_method }} {{ item.snmpv3_auth_password }}"
+priv: "{{ item.snmpv3_encryption_method }} {{ item.snmpv3_priv_password }}"
+localizedkey-snmp-server-user: "{{ item.snmpv3_user }}" 
+use-ipv4acl: "{{ item.snmpv3_user }}-ACL"
+snmp-server-host: "{{ device.snmp_trap_destination }}" 
+traps-version-3-auth: "{{ item.snmpv3_user }}" 
+# snmp-server-host: "{{ device.snmp_trap_destination }}"
+use-vrf-management-snmp-server-source-interface-traps: "{{ mgmt_interface }}" 
+ip-access-list: "{{ item.snmpv3_user }}-ACL" 
+10-permit-ip: "{{ item.0.ipv4_members.item.1 }}"
+
+
+
+#####
+
+## Target state post TSA
+#snmp-server user {{ item.snmpv3_user }} vdc-operator auth {{ item.snmpv3_auth_method }} {{ item.snmpv3_auth_password }} priv {{ item.snmpv3_encryption_method }} {{ item.snmpv3_priv_password }} localizedkey
+#snmp-server user {{ item.snmpv3_user }} use-ipv4acl {{ item.snmpv3_user }}-ACL
+#snmp-server host {{ device.snmp_trap_destination }} traps version 3 auth {{ item.snmpv3_user }}
+#snmp-server host {{ device.snmp_trap_destination }} use-vrf management
+#snmp-server source-inte
