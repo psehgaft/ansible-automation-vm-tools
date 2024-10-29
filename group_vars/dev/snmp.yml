@@ -1,24 +1,50 @@
 ---
-snmp-server-user: "{{ item.snmpv3_user }}" 
-vdc-operator:
-auth: "{{ item.snmpv3_auth_method }} {{ item.snmpv3_auth_password }}"
-priv: "{{ item.snmpv3_encryption_method }} {{ item.snmpv3_priv_password }}"
-localizedkey-snmp-server-user: "{{ item.snmpv3_user }}" 
-use-ipv4acl: "{{ item.snmpv3_user }}-ACL"
-snmp-server-host: "{{ device.snmp_trap_destination }}" 
-traps-version-3-auth: "{{ item.snmpv3_user }}" 
-# snmp-server-host: "{{ device.snmp_trap_destination }}"
-use-vrf-management-snmp-server-source-interface-traps: "{{ mgmt_interface }}" 
-ip-access-list: "{{ item.snmpv3_user }}-ACL" 
-10-permit-ip: "{{ item.0.ipv4_members.item.1 }}"
+#:::: Global variables ::::
 
+snmp_pollers:
+  - name: "Entuity"
+    snmpv3_user: "localsvc_snmp3_entuity"
+    snmpv3_auth_password: "Authpassword"
+    snmpv3_encryption_method: "AES-256"
+    snmpv3_priv_password: "Privpassword"
+    snmpv3_auth_method: "MD5"
+    snmpv2c_community: “community-pwd”
 
+    ipv4_members:
+      - 10.10.10.10
+      - 10.10.10.11
 
-#####
+#:::: From Device variables - Note this is a place holder for now until we figure out the Poller to trap relationship ::::
 
-## Target state post TSA
-#snmp-server user {{ item.snmpv3_user }} vdc-operator auth {{ item.snmpv3_auth_method }} {{ item.snmpv3_auth_password }} priv {{ item.snmpv3_encryption_method }} {{ item.snmpv3_priv_password }} localizedkey
-#snmp-server user {{ item.snmpv3_user }} use-ipv4acl {{ item.snmpv3_user }}-ACL
-#snmp-server host {{ device.snmp_trap_destination }} traps version 3 auth {{ item.snmpv3_user }}
-#snmp-server host {{ device.snmp_trap_destination }} use-vrf management
-#snmp-server source-inte
+    snmp_trap_destination:
+      - 20.10.10.10
+
+#:::: NXOS traps variables ::::
+
+# snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+# snmp-server enable traps flowmon
+# snmp-server enable traps ospf state-change
+# snmp-server enable traps license
+# snmp-server enable traps bfd
+# snmp-server enable traps memory bufferpeak
+# snmp-server enable traps syslog
+# snmp-server enable traps flash insertion
+# snmp-server enable traps flash removal
+# snmp-server enable traps firewall serverstatus
+# snmp-server enable traps aaa_server
+# snmp-server enable traps rsvp
+# snmp-server enable traps bgp
+# snmp-server enable traps bgp cbgp2
+# snmp-server enable traps alarms informational
+
+#:::: Target state post TSA ::::
+
+# snmp-server user {{ item.snmpv3_user }} vdc-operator auth {{ item.snmpv3_auth_method }} {{ item.snmpv3_auth_password }} priv {{ item.snmpv3_encryption_method }} {{ item.snmpv3_priv_password }} localizedkey
+# snmp-server user {{ item.snmpv3_user }} use-ipv4acl {{ item.snmpv3_user }}-ACL
+# snmp-server host {{ item.snmp_trap_destination }} traps version 2c {{ snmpv2c_community }} ## Loop over all trap variables
+# snmp-server host {{ item.snmp_trap_destination }} use-vrf management
+# snmp-server source-interface traps {{ mgmt_interface }}
+# ip access-list {{ item.snmpv3_user }}-ACL
+# 10 permit ip {{ item.0.ipv4_members.item.1 }}
+# 20 permit ip {{ item.0.ipv4_members.item.2 }} ## Loop ipv4_members but the beginning number must increment in 10’s
+...
